@@ -1,0 +1,18 @@
+{
+
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "noResolve": false,
+    "noImplicitAny": false,
+    "preserveConstEnums":true,
+    "lib": [
+      "dom",
+      "es6"
+    ],
+    "rootDir": "src",
+    "jsx": "react"
+  },
+  "types": [
+  ]
+}
