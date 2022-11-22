@@ -1,7 +1,6 @@
 const esbuild = require('esbuild');
 const {watch} = require('chokidar');
 
-
 console.log(process.env.NODE_ENV);
 
 build();
