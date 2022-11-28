@@ -12,8 +12,8 @@ namespace Marrus {
         public inputManager : InputManager;
         public spriteManager : SpriteManager;
 
-        constructor() {
-            this.canvas = document.getElementById("viewport");
+        constructor(canvas) {
+            this.canvas = canvas;
             this.context = this.canvas.getContext("2d");
 
             this.lastFrame = 0;

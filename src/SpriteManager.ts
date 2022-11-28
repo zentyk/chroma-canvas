@@ -27,7 +27,7 @@ export default class SpriteManager {
             loadedImages[i] = image;
         }
 
-        this.images=loadedImages;
+        this.images = loadedImages;
     }
 
     OnLoadedSprites(){

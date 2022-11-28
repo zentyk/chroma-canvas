@@ -16,8 +16,8 @@ function build() {
     esbuild.build({
         entryPoints: ['./src/app.ts'],
         bundle: true,
-        sourcemap : true,
-        target : 'es2015',
+        sourcemap : false,
+        target : "ES2015",
         minify : true,
         outfile: './dist/app.js',
         tsconfig: './tsconfig.json'
