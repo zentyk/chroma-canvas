@@ -1,6 +1,6 @@
 {
-
   "compilerOptions": {
+    "target": "ES6",
     "moduleResolution": "node",
     "esModuleInterop": true,
     "noResolve": false,
@@ -11,8 +11,5 @@
       "es6"
     ],
     "rootDir": "src",
-    "jsx": "react"
-  },
-  "types": [
-  ]
+  }
 }
