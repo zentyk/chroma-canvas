@@ -1,16 +1,18 @@
 const esbuild = require('esbuild');
-const {watch} = require('chokidar');
+const { watch } = require('chokidar');
 
 console.log(process.env.NODE_ENV);
 
 build();
 
-watch('./src/**/*.ts', {}).on('change', (path) => {
-    console.log(`building... ${path}`);
-    build();
-});
+watch('./src/**/*.ts', {})
+    .on('change', (path) => {
+        build();
+    });
 
 function build() {
+    console.log("building...");
+
     esbuild.build({
         entryPoints: ['./src/app.ts'],
         bundle: true,
@@ -20,6 +22,9 @@ function build() {
         outfile: './dist/app.js',
         tsconfig: './tsconfig.json'
     })
-        .then(()=> console.log("Built!"))
-        .catch(() => process.exit(1));
+        .then(() => console.log("Built!"))
+        .catch(() => {
+            console.log('Fail during build.')
+            process.exit(1)
+        });
 }
