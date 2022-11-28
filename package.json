@@ -4,8 +4,7 @@
   "description": "Marrus Game Framework with HTML5 Canvas API",
   "main": "index.js",
   "scripts": {
-    "build-dev": "node build.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build-dev": "node build.js"
   },
   "repository": {
     "type": "git",
@@ -21,11 +20,15 @@
   "devDependencies": {
     "@types/jest": "^29.2.3",
     "chokidar": "^3.5.3",
+    "cypress": "^4.12.1",
+    "cypress-plugin-snapshots": "^1.4.4",
     "esbuild": "^0.15.15",
     "eslint": "^8.28.0",
     "fs-extra": "^10.1.0",
     "handlebars": "^4.7.7",
     "jest": "^29.3.1",
+    "jest-canvas-mock": "^2.4.0",
+    "js-base64": "^2.5.2",
     "ts-jest": "^29.0.3",
     "ts-node": "^10.9.1"
   }
