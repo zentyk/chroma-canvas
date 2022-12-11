@@ -36,7 +36,6 @@ namespace Marrus {
             this.canvas.addEventListener('mouseout',this.inputManager.OnMouseOut);
             this.Main(0);
         }
-        // Main Loop
         Main(tFrame) {
             window.requestAnimationFrame(this.Main);
 
