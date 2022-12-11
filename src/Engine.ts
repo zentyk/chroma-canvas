@@ -14,7 +14,10 @@ namespace Marrus {
 
         constructor(canvas) {
             this.canvas = canvas;
-            this.context = this.canvas.getContext("2d");
+
+            if(this.canvas instanceof HTMLCanvasElement) {
+                this.context = this.canvas.getContext("2d");
+            }
 
             this.lastFrame = 0;
             this.fpsTime = 0;
@@ -33,7 +36,6 @@ namespace Marrus {
             this.canvas.addEventListener('mouseout',this.inputManager.OnMouseOut);
             this.Main(0);
         }
-
         // Main Loop
         Main(tFrame) {
             window.requestAnimationFrame(this.Main);
@@ -41,13 +43,11 @@ namespace Marrus {
             this.Update(tFrame);
             this.Render();
         }
-
         Update(tFrame) {
             let dt = (tFrame-this.lastFrame)/1000;
             this.lastFrame = tFrame;
             this.UpdateFps(dt);
         }
-
         UpdateFps(dt) {
             if(this.fpsTime > 0.25){
                 this.fps = Math.round(this.frameCount/this.fpsTime);
@@ -58,11 +58,9 @@ namespace Marrus {
             this.fpsTime+=dt;
             this.frameCount++;
         }
-
         Render(){
             this.DrawFrame();
         }
-
         DrawFrame() {
             this.context.fillStyle="#d0d0d0";
             this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
@@ -84,6 +82,5 @@ namespace Marrus {
         }
     }
 }
-
 
 export default Marrus;
