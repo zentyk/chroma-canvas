@@ -1,4 +1,5 @@
-const esbuild = require('esbuild');
+const esbuild = require("./node_modules/esbuild/lib/main.js");
+
 const { watch } = require('chokidar');
 
 let mode = process.env.NODE_ENV || 'development';
