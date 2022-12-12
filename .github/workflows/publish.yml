@@ -1,6 +1,6 @@
 name: Node.js Package
 run-name: Publishing to npm
-on: [push]
+on: [push, pull_request]
 env:
   NODE_ENV: production
 jobs:
