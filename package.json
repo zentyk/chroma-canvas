@@ -20,7 +20,9 @@
   "homepage": "https://github.com/zentyk/dfi.marrus-canvas#readme",
   "devDependencies": {
     "chokidar": "^3.5.3",
-    "esbuild": "^0.15.15",
     "eslint": "^8.28.0"
+  },
+  "dependencies": {
+    "esbuild": "0.16.4"
   }
 }
