@@ -1,8 +1,8 @@
 {
   "name": "dfi.marrus-canvas",
-  "version": "1.0.0",
+  "version": "0.0.01",
   "description": "Marrus Game Framework with HTML5 Canvas API",
-  "main": "index.js",
+  "main": "./dist/app.js",
   "scripts": {
     "build": "node build.js"
   },
