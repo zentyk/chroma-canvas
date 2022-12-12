@@ -1,4 +1,4 @@
-const esbuild = require("./node_modules/esbuild/lib/main.js");
+const esbuild = require("esbuild");
 
 const { watch } = require('chokidar');
 
