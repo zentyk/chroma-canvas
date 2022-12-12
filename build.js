@@ -1,25 +1,59 @@
-const esbuild = require('esbuild');
-const {watch} = require('chokidar');
+const esbuild = require("esbuild");
 
-console.log(process.env.NODE_ENV);
+const { watch } = require('chokidar');
 
-build();
+let mode = process.env.NODE_ENV || 'development';
 
-watch('./src/**/*.ts', {}).on('change', (path) => {
-    console.log(`building... ${path}`);
-    build();
-});
-
-function build() {
+function prodBuild() {
     esbuild.build({
         entryPoints: ['./src/app.ts'],
         bundle: true,
-        sourcemap : true,
-        target : 'es2015',
+        sourcemap : false,
+        target : "ES2015",
         minify : true,
         outfile: './dist/app.js',
         tsconfig: './tsconfig.json'
     })
-        .then(()=> console.log("Built!"))
-        .catch(() => process.exit(1));
+        .then(() => {
+            console.log("Built!")
+            process.exit(0)
+        })
+        .catch(() => {
+            console.log('Fail during build.')
+            process.exit(1)
+        });
 }
+
+function devBuild() {
+    esbuild.build({
+        entryPoints: ['./src/app.ts'],
+        bundle: true,
+        sourcemap : true,
+        target : "es2015",
+        minify : false,
+        outfile: './dist/app.js',
+        tsconfig: './tsconfig.json'
+    })
+        .then(() => console.log("Built!"))
+        .catch(() => {
+            console.log('Fail during build.')
+            process.exit(1)
+        });
+}
+
+if (mode === 'development') {
+    console.log('Development mode');
+    devBuild();
+} else {
+    console.log('Production mode');
+    prodBuild();
+}
+
+watch('./src/**/*.ts', {})
+    .on('change', () => {
+        if(mode === 'development') {
+            devBuild();
+        } else {
+            prodBuild();
+        }
+    });
