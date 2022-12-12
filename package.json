@@ -4,7 +4,7 @@
   "description": "Marrus Game Framework with HTML5 Canvas API",
   "main": "./dist/app.js",
   "scripts": {
-    "devBuild" : "node build.js",
+    "devBuild": "node build.js",
     "build": "esbuild ./src/app.js --bundle --outfile=./dist/app.js --minify --target=es2015 --minify --tsconfig=./tsconfig.json"
   },
   "repository": {
