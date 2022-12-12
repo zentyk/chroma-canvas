@@ -29,7 +29,7 @@ function devBuild() {
         entryPoints: ['./src/app.ts'],
         bundle: true,
         sourcemap : true,
-        target : "ES2015",
+        target : "es2015",
         minify : false,
         outfile: './dist/app.js',
         tsconfig: './tsconfig.json'
@@ -50,7 +50,7 @@ if (mode === 'development') {
 }
 
 watch('./src/**/*.ts', {})
-    .on('change', (path) => {
+    .on('change', () => {
         if(mode === 'development') {
             devBuild();
         } else {
