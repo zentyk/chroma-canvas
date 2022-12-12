@@ -4,7 +4,7 @@
   "description": "Marrus Game Framework with HTML5 Canvas API",
   "main": "index.js",
   "scripts": {
-    "build-dev": "node build.js"
+    "build": "node build.js"
   },
   "repository": {
     "type": "git",
