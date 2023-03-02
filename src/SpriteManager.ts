@@ -17,14 +17,11 @@ export default class SpriteManager {
 
         let loadedImages = [];
 
-        for(let i=0; i < this.assetList.length; i++){
+        for(let i=0; i < this.assetList.length; i++) {
             let image = new Image();
-
             let that = this;
-            image.onload = function () {that.OnLoadedSprites()};
-
+            image.onload = function () { that.OnLoadedSprites() };
             image.src = this.assetList[i];
-
             loadedImages[i] = image;
         }
 
@@ -33,7 +30,7 @@ export default class SpriteManager {
 
     OnLoadedSprites() {
         this.loadCount++;
-        if (this.loadCount === this.loadTotal) {
+        if(this.loadCount === this.loadTotal) {
             this.preloaded = true;
         }
     }
