@@ -15,8 +15,6 @@ namespace Marrus {
             this.config = config;
             this.then = Date.now();
             this.spriteManager = new SpriteManager();
-            this.spriteManager.AddSprites('img.png');
-            this.Init();
         }
         Init() {
             try {
@@ -45,7 +43,8 @@ namespace Marrus {
         private Render() {
             this.now = Date.now();
             this.delta = this.now - this.then;
-            if(this.delta > 1000/this.config.fps){
+            if(this.delta > 1000/this.config.fps) {
+                this.context.clearRect(0,0,this.canvas.width,this.canvas.height)
                 this.Draw();
                 this.then = this.now;
             }

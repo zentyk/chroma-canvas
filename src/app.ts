@@ -26,4 +26,6 @@ class Config {
 window.onload = function () {
     let config = new Config();
     let engine = new Marrus.Engine(config);
+    engine.spriteManager.AddSprites('img.png');
+    engine.Init();
 }
