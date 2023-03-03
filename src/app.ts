@@ -1,31 +1,35 @@
 import Marrus from "./Engine";
+import Scene = Marrus.Scene;
+import Sprite = Marrus.Sprite;
+class Scene1 extends Scene {
+    private player: any;
+    constructor(engine : Marrus.Engine, parameters? : any) {
+        super(engine,parameters);
+    }
+    Preload() {
+        this.engine.spriteManager.AddSprites('img.png');
+        super.Preload();
+    }
 
-enum errorTypes {
-    ENERR = "Engine Error",
-    SYSERR = "System Error",
-    GRAPHERR = "Graphics Error",
-    MATHERR = "Math Error",
-    NETERR = "Network Error",
-    GERR = "Game Error",
-    FILEERR = "File Error",
-    MEMERR = "Memory Error",
-    SOUNDERR = "Sound Error",
-}
-
-class Config {
-    private title = "Marrus";
-    private fps = 60;
-    private width = 800;
-    private height = 600;
-    private backgroundColor = '#16725e';
-    private context = "2d";
-    public readonly canvasId = "viewport";
-    public readonly errorTypes = errorTypes;
+    Init() {
+        this.player = new Sprite(0,0,100,100,'red',this.engine.spriteManager.images[0]);
+        this.AddObject(this.player);
+        super.Init();
+    }
+    
+    Update() {
+        this.player.x++;
+        super.Update();
+    }
 }
 
 window.onload = function () {
-    let config = new Config();
+    let config = new Marrus.Config();
     let engine = new Marrus.Engine(config);
-    engine.spriteManager.AddSprites('img.png');
+    let params = [];
+    params.push({isNew: true})
     engine.Init();
+    let scene1 = new Scene1(engine,params);
+    engine.sceneManager.AddScene(scene1);
+    engine.sceneManager.SetScene(scene1);
 }
