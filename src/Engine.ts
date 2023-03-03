@@ -1,5 +1,6 @@
 import InputManager from "./InputManager";
 import SpriteManager from "./SpriteManager";
+import Entity from "./Entity";
 
 namespace Marrus {
     export class Engine {
@@ -54,38 +55,40 @@ namespace Marrus {
             this.delta = this.now - this.then;
             if(this.delta > 1000/60) {
                 this.context.clearRect(0,0,this.canvas.width,this.canvas.height);
-                this.sceneManager.DrawScene();
+                this.sceneManager.UpdateScene();
                 this.then = this.now;
             }
             window.requestAnimationFrame(this.Render.bind(this));
         }
     }
 
-    class Box {
-        private x : number;
-        private y : number;
-        private h : number;
-        private w : number;
-        private color : string;
+    class Sprite extends Entity {
+        public color : string;
         public image : HTMLImageElement;
-        constructor(x : number, y : number, h : number, w : number, color : string, image? : HTMLImageElement) {
-            this.x = x;
-            this.y = y;
-            this.h = h;
-            this.w = w;
+
+        constructor(x: number, y: number, h: number, w: number, color: string, image?: HTMLImageElement) {
+            super(x, y, h, w);
             this.color = color;
             this.image = image;
         }
 
+        Start() {
+            super.Start();
+        }
+
+        Update(context : CanvasRenderingContext2D) {
+            super.Update(context);
+        }
+
         Draw(context : CanvasRenderingContext2D) {
-            this.x++;
+            super.Draw(context);
             context.drawImage(this.image,this.x,0);
         }
     }
 
     class SceneManager {
-        private scenes : any = [];
-        private currentScene : any;
+        scenes : any = [];
+        private currentScene : Scene;
         private context: CanvasRenderingContext2D;
         private config: any;
         private spriteManager: SpriteManager;
@@ -103,8 +106,8 @@ namespace Marrus {
             this.currentScene = scene;
         }
 
-        DrawScene() {
-            this.currentScene.Draw(this.context);
+        UpdateScene() {
+            this.currentScene.Update(this.context);
         }
     }
 
@@ -126,21 +129,28 @@ namespace Marrus {
         }
 
         Init() {
-            this.objects.push(new Box(0,0,100,100,'red',this.spriteManager.images[0]));
+            this.objects.push(new Sprite(0,0,100,100,'red',this.spriteManager.images[0]));
+            for(let i=0; i < this.objects.length; i++) {
+                this.objects[i].Start();
+            }
             this.ActionButton();
+        }
+
+        Update(context: CanvasRenderingContext2D) {
+            this.Draw(context);
+            for(let i=0; i < this.objects.length; i++) {
+                this.objects[i].Update(context);
+            }
         }
 
         Draw(context : CanvasRenderingContext2D) {
             context.fillStyle = this.backgroundColor;
             context.fillRect(0,0,context.canvas.width,context.canvas.height);
-            for(let i=0; i < this.objects.length; i++) {
-                this.objects[i].Draw(context);
-            }
         }
 
         ActionButton () {
             if(this.parameters){
-                console.log(this.parameters[0].isNew);
+
             } else {
                 //search entry id
                 //if found, update entry
