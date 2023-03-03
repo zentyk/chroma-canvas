@@ -35,15 +35,18 @@ namespace Marrus {
             //this.canvas.addEventListener('mousedown',this.inputManager.OnMouseDown);
             //this.canvas.addEventListener('mouseup',this.inputManager.OnMouseUp);
             //this.canvas.addEventListener('mouseout',this.inputManager.OnMouseOut);
-            this.Main();
             this.sceneManager = new SceneManager(this.config,this.spriteManager,this.context);
-            let scene1 = this.sceneManager.AddScene(new Scene(this.context,this.config,this.spriteManager));
-            this.sceneManager.SetScene(this.sceneManager.scenes[0]);
+            this.Main();
         }
 
         Main() {
             this.then = Date.now();
             this.Render();
+            let params = [];
+            params.push({isNew: true});
+            let scene1 = this.sceneManager.AddScene(new Scene(this.context,this.config,this.spriteManager, params));
+
+            this.sceneManager.SetScene(this.sceneManager.scenes[0]);
         }
 
         private Render() {
@@ -93,7 +96,7 @@ namespace Marrus {
         }
 
         AddScene(scene) {
-            this.scenes.push(new Scene(this.context,this.config,this.spriteManager));
+            this.scenes.push(scene);
         }
 
         SetScene(scene : any) {
@@ -108,8 +111,11 @@ namespace Marrus {
     class Scene {
         public objects : any = [];
         public backgroundColor : string;
+        public parameters : boolean = false;
         private spriteManager: SpriteManager;
-        constructor(context : CanvasRenderingContext2D,config : any, spriteManager : SpriteManager) {
+
+        constructor(context : CanvasRenderingContext2D,config : any, spriteManager : SpriteManager, parameters? : boolean) {
+            this.parameters = parameters;
             this.spriteManager = spriteManager;
             if(config.backgroundColor) {
                 this.backgroundColor = config.backgroundColor
@@ -121,6 +127,7 @@ namespace Marrus {
 
         Init() {
             this.objects.push(new Box(0,0,100,100,'red',this.spriteManager.images[0]));
+            this.ActionButton();
         }
 
         Draw(context : CanvasRenderingContext2D) {
@@ -128,6 +135,16 @@ namespace Marrus {
             context.fillRect(0,0,context.canvas.width,context.canvas.height);
             for(let i=0; i < this.objects.length; i++) {
                 this.objects[i].Draw(context);
+            }
+        }
+
+        ActionButton () {
+            if(this.parameters){
+                console.log(this.parameters[0].isNew);
+            } else {
+                //search entry id
+                //if found, update entry
+                //else, create new entry
             }
         }
     }
