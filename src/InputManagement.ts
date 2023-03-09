@@ -1,4 +1,4 @@
-export default class InputManager {
+export default class InputManagement {
     constructor() { }
 
     OnMouseMove(e) { }

@@ -1,6 +1,6 @@
 {
   "name": "dfi.marrus-canvas",
-  "version": "0.0.01",
+  "version": "0.0.02",
   "description": "Marrus Game Framework with HTML5 Canvas API",
   "main": "./dist/app.js",
   "scripts": {
@@ -11,9 +11,9 @@
     "type": "git",
     "url": "git+https://github.com/zentyk/dfi.marrus-canvas.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["html5","canvas", "game", "framework", "marrus"],
+  "author": "Zentyk",
+  "license": "WTFPL",
   "bugs": {
     "url": "https://github.com/zentyk/dfi.marrus-canvas/issues"
   },

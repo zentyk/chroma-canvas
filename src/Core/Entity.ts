@@ -21,3 +21,7 @@ export default class Entity {
 
     Draw(context : CanvasRenderingContext2D) {}
 }
+
+interface IEntity {
+
+}

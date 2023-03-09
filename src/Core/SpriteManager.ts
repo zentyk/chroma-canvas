@@ -1,5 +1,4 @@
 export default class SpriteManager {
-
     public loadCount : number;
     public loadTotal : number;
     public preloaded : boolean;
