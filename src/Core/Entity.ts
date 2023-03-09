@@ -1,4 +1,4 @@
-export default class Entity {
+export class Entity {
     public x : number;
     public y : number;
     public h : number;
@@ -22,6 +22,13 @@ export default class Entity {
     Draw(context : CanvasRenderingContext2D) {}
 }
 
-interface IEntity {
+export interface IEntity {
+    x : number;
+    y : number;
+    h : number;
+    w : number;
+    Start() : void;
+    Update(context : CanvasRenderingContext2D) : void;
+    Draw(context : CanvasRenderingContext2D) : void;
 
 }
