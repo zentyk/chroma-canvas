@@ -17,10 +17,10 @@ namespace Marrus {
     export class Config {
         public readonly title = "WL_Match-3";
         public readonly fps = 60;
-        public readonly width = 800;
-        public readonly height = 600;
+        public readonly width = 2050;
+        public readonly height = 3400;
         public readonly backgroundColor = '#16725e';
-        public readonly canvasId = "viewport";
+        public readonly canvasId = "marrus";
         public readonly errorTypes = errorTypes;
     }
     export class Engine {
@@ -42,10 +42,10 @@ namespace Marrus {
         Init() {
             try {
                 this.canvas = document.getElementById(this.config.canvasId) as HTMLCanvasElement;
-                this.canvas.style.width = String(2050);
-                this.canvas.style.height = String(3400);
+                this.Resize(this.config.width,this.config.height);
                 if(this.canvas instanceof HTMLCanvasElement) {
                     this.context = this.canvas.getContext('2d');
+
                 }
             } catch(e) {
                 alert(`${this.config.errorTypes.ENERR} ${e.message}`);
@@ -56,6 +56,9 @@ namespace Marrus {
             //this.canvas.addEventListener('mouseup',this.inputManager.OnMouseUp);
             //this.canvas.addEventListener('mouseout',this.inputManager.OnMouseOut);
             console.log(`🍕 Marrus Engine 1.0 presents : ${this.config.title}`);
+            window.onresize = () => {
+                this.Resize(window.innerWidth,window.innerHeight);
+            };
             this.Main();
         }
 
@@ -73,6 +76,13 @@ namespace Marrus {
                 this.then = this.now;
             }
             window.requestAnimationFrame(this.Render.bind(this));
+        }
+
+        public Resize(width : number, height : number) {
+            this.canvas.width = width;
+            this.canvas.height = height;
+            this.canvas.style.width = String(width);
+            this.canvas.style.height = String(height);
         }
     }
 }

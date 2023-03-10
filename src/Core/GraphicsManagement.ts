@@ -21,7 +21,11 @@ namespace Graphics {
 
         Draw(context : CanvasRenderingContext2D) {
             super.Draw(context);
-            context.drawImage(this.image,this.x,this.y,this.w,this.h);
+            context.drawImage(this.image,
+                context.canvas.clientWidth/this.x,
+                context.canvas.clientHeight/this.y,
+                context.canvas.clientWidth/this.w,
+                context.canvas.clientHeight/this.h);
         }
     }
     export class SpriteSheet implements IEntity {
@@ -63,11 +67,64 @@ namespace Graphics {
         }
 
         Draw(context: CanvasRenderingContext2D): void {
-            context.drawImage(this.images[this.currentImage],this.x,this.y,this.w,this.h);
+            context.drawImage(this.images[this.currentImage],
+                context.canvas.clientWidth/this.x,
+                context.canvas.clientHeight/this.y,
+                context.canvas.clientWidth/this.w,
+                context.canvas.clientHeight/this.h);
         }
 
     }
-    export class SpriteAtlas {
+    export class SpriteAtlas implements IEntity {
+        h: number;
+        w: number;
+        x: number;
+        y: number;
+
+        Draw(context: CanvasRenderingContext2D): void {
+        }
+
+        Start(): void {
+        }
+
+        Update(context: CanvasRenderingContext2D): void {
+        }
+    }
+    export class Circle implements IEntity {
+        public x : number;
+        public y : number;
+        public h: number;
+        public w: number;
+        public radius : number;
+        public color : string;
+
+        public min : number;
+
+        constructor(x : number, y : number, radius : number, color : string, min : number) {
+            this.min = min*1000;
+            this.x = x;
+            this.y = y;
+            this.radius = radius;
+            this.color = color;
+        }
+
+        Start() {
+
+        }
+
+        Update(context : CanvasRenderingContext2D) {
+            this.Draw(context);
+        }
+
+        Draw(context : CanvasRenderingContext2D) {
+            context.beginPath();
+            context.arc((context.canvas.clientWidth/(this.x)), (context.canvas.clientHeight/this.y), (this.min * 0.05), 0, 2 * Math.PI, false);
+            context.fillStyle = this.color;
+            context.fill();
+            context.lineWidth = 5;
+            context.strokeStyle = '#003300';
+            context.stroke();
+        }
     }
 }
 
