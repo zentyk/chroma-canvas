@@ -40,9 +40,9 @@ namespace Marrus {
         Init() {
             try {
                 this.canvas = document.getElementById(this.config.canvasId) as HTMLCanvasElement;
-                this.Resize(window.innerWidth,window.innerHeight);
                 if(this.canvas instanceof HTMLCanvasElement) {
                     this.context = this.canvas.getContext('2d');
+                    this.Resize(this.context.canvas.clientWidth,this.context.canvas.clientHeight);
 
                 }
             } catch(e) {
@@ -55,7 +55,7 @@ namespace Marrus {
             //this.canvas.addEventListener('mouseout',this.inputManager.OnMouseOut);
             console.log(`🍕 Marrus Engine 1.0 presents : ${this.config.title}`);
             window.onresize = () => {
-                this.Resize(window.innerWidth,window.innerHeight);
+                this.Resize(this.context.canvas.clientWidth,this.context.canvas.clientHeight);
             };
             this.Main();
         }
