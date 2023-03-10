@@ -17,8 +17,6 @@ namespace Marrus {
     export class Config {
         public readonly title = "WL_Match-3";
         public readonly fps = 60;
-        public readonly width = 2050;
-        public readonly height = 3400;
         public readonly backgroundColor = '#16725e';
         public readonly canvasId = "marrus";
         public readonly errorTypes = errorTypes;
@@ -42,7 +40,7 @@ namespace Marrus {
         Init() {
             try {
                 this.canvas = document.getElementById(this.config.canvasId) as HTMLCanvasElement;
-                this.Resize(this.config.width,this.config.height);
+                this.Resize(window.innerWidth,window.innerHeight);
                 if(this.canvas instanceof HTMLCanvasElement) {
                     this.context = this.canvas.getContext('2d');
 
