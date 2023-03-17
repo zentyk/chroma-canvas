@@ -52,22 +52,26 @@ namespace SceneManagement {
 
         Init() {
             for(let i=0; i < this.objects.length; i++) {
-                this.objects[i].Start();
+                this.objects[i].object.Start();
             }
         }
 
-        public AddObject(object) {
-            this.objects.push(object);
+        public AddObject(name,object) {
+            this.objects.push({name:name,object:object});
         }
 
-        public RemoveObject(object) {
-            this.objects.splice(this.objects.indexOf(object),1);
+        public RemoveObject(name) {
+            for(let i=0; i < this.objects.length; i++) {
+                if(this.objects[i].name == name) {
+                    this.objects.splice(i,1);
+                }
+            }
         }
 
         Update() {
             this.Draw();
             for(let i=0; i < this.objects.length; i++) {
-                this.objects[i].Update(this.engine.context);
+                this.objects[i].object.Update(this.engine.context);
             }
         }
 

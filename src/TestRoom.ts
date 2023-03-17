@@ -20,7 +20,7 @@ export default class TestRoom extends SceneManagement.Scene {
     }
 
     Init() {
-        this.Player = new Graphics.SpriteSheet(100, 100, 16,12,100,7,[
+        this.Player = new Graphics.SpriteSheet(200, 200, 200,200,100,7,[
             this.engine.spriteManager.images[0],
             this.engine.spriteManager.images[1],
             this.engine.spriteManager.images[2],
@@ -29,11 +29,9 @@ export default class TestRoom extends SceneManagement.Scene {
             this.engine.spriteManager.images[5],
             this.engine.spriteManager.images[6],
         ]);
-        let sprite = new Graphics.Sprite(100,100,16,12,'white',this.engine.spriteManager.images[0]);
-        let circle = new Graphics.Circle(20,50,1,'white',0.1);
+        let sprite = new Graphics.Sprite(500,200,200,200,'white',this.engine.spriteManager.images[0]);
         this.AddObject(this.Player);
         this.AddObject(sprite);
-        this.AddObject(circle);
         super.Init();
     }
 

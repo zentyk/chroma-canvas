@@ -20,6 +20,8 @@ namespace Marrus {
         public readonly backgroundColor = '#16725e';
         public readonly canvasId = "marrus";
         public readonly errorTypes = errorTypes;
+        public readonly canvasWidth = 2050;
+        public readonly canvasHeight = 3040;
     }
     export class Engine {
         public canvas : HTMLCanvasElement;
@@ -29,7 +31,7 @@ namespace Marrus {
         public config : any;
         private then : any;
         private delta: any;
-        private now: any;SceneManagement;
+        private now: any;
         public sceneManager : SceneManagement.SceneManager;
         constructor(config : Config) {
             this.config = config as Config;
@@ -42,7 +44,7 @@ namespace Marrus {
                 this.canvas = document.getElementById(this.config.canvasId) as HTMLCanvasElement;
                 if(this.canvas instanceof HTMLCanvasElement) {
                     this.context = this.canvas.getContext('2d');
-                    this.Resize(this.context.canvas.clientWidth,this.context.canvas.clientHeight);
+                    this.Resize(this.config.canvasWidth,this.config.canvasHeight);
 
                 }
             } catch(e) {
@@ -55,7 +57,7 @@ namespace Marrus {
             //this.canvas.addEventListener('mouseout',this.inputManager.OnMouseOut);
             console.log(`🍕 Marrus Engine 1.0 presents : ${this.config.title}`);
             window.onresize = () => {
-                this.Resize(this.context.canvas.clientWidth,this.context.canvas.clientHeight);
+                //this.Resize(this.context.canvas.clientWidth,this.context.canvas.clientHeight);
             };
             this.Main();
         }

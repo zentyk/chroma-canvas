@@ -4,42 +4,56 @@ import Scene = SceneManagement.Scene;
 import Graphics from "./Core/GraphicsManagement";
 import Sprite = Graphics.Sprite;
 
-export default class Match3 extends Scene {
-    private level : any = {};
-    private tileSprites = [
-        'img.png',
-    ];
-    private moves = [];
-    private clusters = [];
-
-    private score = 0;
-
-    private currentMove = {column:0,row:0,direction:0};
-    private gameStates = {init:0,ready:1,resolve:2};
-    private gameState = this.gameStates.init;
-    private gameover = false;
+export default class MainGame extends Scene {
+    private match3 : Match3;
+    private level : any;
+    private gemsUrls : any = [];
+    private selectedTile: any;
 
     constructor(engine : Marrus.Engine, parameters? : any) {
         super(engine,parameters);
+        this.match3 = new Match3();
+        this.level = {
+            x : 249,
+            y : 700,
+            tileWidth : 200,
+            tileHeight : 200,
+        };
+        //input on click
+        this.engine.canvas.addEventListener('touchstart', (e) => {
+            this.SelectTile(e);
+        });
     }
 
     Preload() {
-        this.engine.spriteManager.AddSprites('img.png');
+        this.gemsUrls = [
+            'assets/gems/gem0.png',
+            'assets/gems/gem1.png',
+            'assets/gems/gem2.png',
+            'assets/gems/gem3.png',
+            'assets/gems/gem4.png',
+            'assets/gems/gem5.png',
+            'assets/gems/gem6.png',
+        ];
+        this.engine.spriteManager.AddSprites(this.gemsUrls[0]);
+        this.engine.spriteManager.AddSprites(this.gemsUrls[1]);
+        this.engine.spriteManager.AddSprites(this.gemsUrls[2]);
+        this.engine.spriteManager.AddSprites(this.gemsUrls[3]);
+        this.engine.spriteManager.AddSprites(this.gemsUrls[4]);
+        this.engine.spriteManager.AddSprites(this.gemsUrls[5]);
+        this.engine.spriteManager.AddSprites(this.gemsUrls[6]);
+        this.engine.spriteManager.AddSprites('./assets/UI/background.png');//7
+        this.engine.spriteManager.AddSprites('./assets/UI/BoardPanel.png');//8
+        this.engine.spriteManager.AddSprites('./assets/UI/BoardBg.png');//9
+        this.engine.spriteManager.AddSprites('./assets/UI/SelectedItem.png');//10
         super.Preload();
     }
 
     Init() {
-        this.level = {
-            x : 250,
-            y : 1200,
-            columns : 8,
-            rows : 8,
-            tileWidth : 200,
-            tileHeight : 200,
-            tiles : [],
-            selectedTile : {selected:false,column:0,row:0},
-        };
-        this.CreateLevel();
+        this.SetupUI();
+        setTimeout(() => {
+            this.CreateLevel();
+        }, 500);
         super.Init();
     }
 
@@ -50,204 +64,279 @@ export default class Match3 extends Scene {
     CreateLevel() {
         let done = false;
 
-        while(!done) {
-            for (let i = 0; i < this.level.columns; i++) {
-                this.level.tiles[i] = [];
-                for (let j = 0; j < this.level.rows; j++) {
-                    let tile = new Sprite(
-                        this.level.x + i * this.level.tileWidth,
-                        this.level.y + j * this.level.tileHeight - 500,
-                        this.level.tileWidth,
-                        this.level.tileHeight,
-                        'red',
-                        this.engine.spriteManager.images[0]
-                    );
-                    this.AddObject(tile);
-                    let tileObject = new Tile(tile, i, j, 0, 0);
-                    this.level.tiles[i][j] = tileObject;
-                }
-            }
+        //while(!done) {
+        this.match3.GenerateBoard();
+        this.DrawBoard();
+            //this.ResolveClusters();
+            //this.FindMoves();
 
-            this.ResolveClusters();
-            this.FindMoves();
-
-            if(this.moves.length > 0) {
+            /*if(this.moves.length > 0) {
                 done = true;
-            }
-        }
+            }*/
+        //}
     }
 
-    ClearLevel(){
+    public ClearLevel() {
         for(let i = 0; i < this.level.columns; i++){
             for(let j = 0; j < this.level.rows; j++){
-                this.RemoveObject(this.level.tiles[i][j].sprite);
+                setTimeout(() => {
+                    this.RemoveObject(this.level.tiles[i][j]);
+                    this.level.tiles[i][j] = null;
+                }, 500+(i*100)+(j*100));
             }
         }
-        this.level.tiles = [];
     }
 
-    ResolveClusters() {
-        this.FindClusters();
+    private SetupUI() {
+        let background = new Sprite(0,0,3730,2052,'white',1.0,this.engine.spriteManager.images[7]);
+        let boardPanel = new Sprite(225,425,300,1650,'white',1.0,this.engine.spriteManager.images[8]);
+        let boardBg = new Sprite(225,675,1650,1650,'white',1.0,this.engine.spriteManager.images[9]);
+        this.AddObject('background',background);
+        this.AddObject('boardpanel',boardPanel);
+        this.AddObject('boardbg',boardBg);
+    }
 
-        while(this.clusters.length > 0) {
-            this.RemoveClusters();
-            this.ShiftTiles();
-            this.FindClusters();
+    private DrawBoard() {
+        for(let i = 0; i < this.match3.columns; i++){
+            for(let j = 0; j < this.match3.rows; j++){
+                let s = new Sprite(
+                    this.level.x + (i * this.level.tileWidth),
+                    this.level.y + (j * this.level.tileHeight),
+                    this.level.tileWidth,
+                    this.level.tileHeight,
+                    'white',
+                    1.0,
+                    this.engine.spriteManager.images[this.match3.items[i][j].type]);
+                setTimeout(() => {
+                    let nme = `tile${i},${j}`;
+                    this.AddObject(name, s);
+                    this.match3.items[i][j].sprite = s;
+                }, 500 + (i * 100) + (j * 10));
+            }
         }
     }
 
-    FindClusters() {
-        this.clusters = [];
-        for(let j = 0; j < this.level.rows; j++) {
-            let matchLength = 1;
-            for(let i=0; i < this.level.columns; i++) {
-                let checkedCluster = true;
-                if(i === this.level.columns - 1) {
-                    checkedCluster = true;
+    private SelectTile(e: TouchEvent) {
+        let x = e.touches[0].clientX;
+        let y = e.touches[0].clientY;
+        let column = Math.floor((x - this.level.x) / this.level.tileWidth);
+        let row = Math.floor((y - this.level.y) / this.level.tileHeight);
+
+        if(this.match3.GetValidItem(column,row)) {
+            let selectSprites = [];
+            let sp1, sp2 = null;
+            let selected = this.match3.SelectItem(column,row);
+            if(selected === 1) {
+                sp1 = new Sprite(
+                    this.level.x + (column * this.level.tileWidth),
+                    this.level.y + (row * this.level.tileHeight),
+                    this.level.tileWidth,
+                    this.level.tileHeight,
+                    'white',
+                    1.0,
+                    this.engine.spriteManager.images[10]
+                );
+                this.AddObject('selected1', sp1);
+            }
+            else if(selected === 2) {
+                sp2 = new Sprite(
+                    this.level.x + (column * this.level.tileWidth),
+                    this.level.y + (row * this.level.tileHeight),
+                    this.level.tileWidth,
+                    this.level.tileHeight,
+                    'white',
+                    1.0,
+                    this.engine.spriteManager.images[10]
+                );
+                this.AddObject('selected2', sp2);
+                let canSwap = this.match3.CanSwapItems();
+                if(canSwap) {
+                    this.match3.SwapItems();
+                    this.SwapSprites();
+                    this.match3.ClearSelectedItems();
+                    this.RemoveObject('selected1');
+                    this.RemoveObject('selected2');
                 } else {
-                    if(this.level.tiles[i][j].type === this.level.tiles[i+1][j].type &&
-                        this.level.tiles[i][j].type !== -1) {
-                        matchLength++;
-                    } else {
-                        checkedCluster = true;
-                    }
-                }
-
-                if(checkedCluster) {
-                    if(matchLength >= 3) {
-                        this.clusters.push({column:i+1-matchLength,row:j,length:matchLength,horizontal:true});
-                    }
-                    matchLength = 1;
+                    this.RemoveObject('selected1');
+                    this.RemoveObject('selected2');
                 }
             }
-        }
-
-        for(let i = 0; i < this.level.columns; i++) {
-            let matchLength = 1;
-            for(let j=0; j < this.level.rows; j++) {
-                let checkedCluster = true;
-                if(j === this.level.rows - 1) {
-                    checkedCluster = true;
-                } else {
-                    if(this.level.tiles[i][j].type === this.level.tiles[i][j+1].type &&
-                        this.level.tiles[i][j].type !== -1) {
-                        matchLength++;
-                    } else {
-                        checkedCluster = true;
-                    }
-                }
-
-                if(checkedCluster) {
-                    if(matchLength >= 3) {
-                        this.clusters.push({column:i,row:j+1-matchLength,length:matchLength,horizontal:false});
-                    }
-                    matchLength = 1;
-                }
+            else if(selected === 0) {
+                this.RemoveObject('selected1');
+                this.RemoveObject('selected2');
             }
         }
     }
 
-    SwapTiles(x1 : number, y1 : number, x2 : number, y2 : number) {
-        let typeswap = this.level.tiles[x1][y1].type;
-        this.level.tiles[x1][y1].type = this.level.tiles[x2][y2].type;
-        this.level.tiles[x2][y2].type = typeswap;
-    }
-
-    FindMoves() {
-        this.moves = [];
-
-        for(let j = 0; j < this.level.rows; j++) {
-            for(let i = 0; i < this.level.columns-1; i++) {
-                this.SwapTiles(i, j, i + 1, j);
-                this.FindClusters();
-                this.SwapTiles(i, j, i + 1, j);
-
-                if(this.clusters.length > 0) {
-                    this.moves.push({column1:i,row1:j,column2:i+1,row2:j});
-                }
-            }
-        }
-
-        for(let i = 0; i < this.level.columns; i++) {
-            for(let j = 0; j < this.level.rows-1; j++) {
-                this.SwapTiles(i, j, i, j + 1);
-                this.FindClusters();
-                this.SwapTiles(i, j, i, j + 1);
-
-                if(this.clusters.length > 0) {
-                    this.moves.push({column1:i,row1:j,column2:i,row2:j+1});
-                }
-            }
-        }
-
-        this.clusters = [];
-    }
-
-    LoopClusters(callback : Function, context : any) {
-        for(let i = 0; i < this.clusters.length; i++) {
-            let cluster = this.clusters[i];
-            let cOffset = 0;
-            let rOffset = 0;
-            for(let j = 0; j < cluster.length; j++) {
-                callback.call(i,cluster.column+cOffset,cluster.row+rOffset,cluster);
-
-                if(cluster.horizontal) {
-                    cOffset++;
-                } else {
-                    rOffset++;
-                }
-            }
-        }
-    }
-
-    RemoveClusters() {
-        this.LoopClusters(function(index,column,row,cluster){this.level.tiles[column][row].type = -1;},this);
-
-        for(let i = 0; i<this.level.columns; i++) {
-            let shift = 0;
-            for(let j = this.level.rows-1; j>=0; j--){
-                if(this.level.tiles[i][j].type === -1){
-                    shift++;
-                    this.level.tiles[i][j].shift = 0;
-                } else {
-                    this.level.tiles[i][j].shift = shift;
-                }
-            }
-        }
-    }
-
-    ShiftTiles() {
-        for(let i = 0; i<this.level.columns; i++) {
-            for(let j = this.level.rows-1; j>=0; j--){
-                if(this.level.tiles[i][j].type === -1) {
-                    this.level.tiles[i][j].type = this.GetRandomTile();
-                } else {
-                    let shift = this.level.tiles[i][j].shift;
-                    if(shift > 0) {
-                        this.SwapTiles(i, j, i, j + shift);
-                    }
-                }
-                this.level.tiles[i][j].shift = 0;
-            }
-        }
-    }
-
-    GetRandomTile() {
-        return Math.floor(Math.random() * this.level.tileTypes);
+    private SwapSprites() {
+        let sp1 = this.match3.items[this.match3.selectedItems[0].column][this.match3.selectedItems[0].row].sprite
+        let sp2 = this.match3.items[this.match3.selectedItems[1].column][this.match3.selectedItems[1].row].sprite;
+        let x1 = sp1.x;
+        let y1 = sp1.y;
+        let x2 = sp2.x;
+        let y2 = sp2.y;
+        //animate sprite positions each frame
+        sp1.x = x2;
+        sp1.y = y2;
+        sp2.x = x1;
+        sp2.y = y1;
     }
 }
-class Tile {
-    sprite : Sprite;
+
+class Match3 {
+    public items: any[];
+    public readonly columns = 8;
+    public readonly rows = 8;
+    private moves = [];
+    private clusters = [];
+    private score = 0;
+    public selectedItems = [];
+    private currentMove = {column:0,row:0,direction:0};
+    private gameStates = {init:0,ready:1,resolve:2};
+    private gameState = this.gameStates.init;
+    private gameover = false;
+
+    constructor() {
+        this.items = [];
+        this.selectedItems = [];
+    }
+
+    public GenerateBoard() {
+        for (let i = 0; i < this.columns; i++) {
+            this.items[i] = [];
+            for (let j = 0; j < this.rows; j++) {
+                let type = Math.floor(Math.random() * 6);
+                this.items[i][j] = new Item(i, j, type, false, null);
+            }
+        }
+    }
+
+    public GetValidItem(column : number, row : number) {
+        if(column < 0 || column >= this.columns || row < 0 || row >= this.rows) {
+            return false;
+        }
+        return true;
+    }
+
+    public SelectItem(column : number, row : number) {
+        if(this.selectedItems.length === 0) {
+            this.selectedItems.push({column:column,row:row});
+            return 1;
+        }
+        else if(this.selectedItems.length === 1) {
+            if(this.AreAdjacent(this.selectedItems[0],{column:column,row:row})) {
+                this.selectedItems.push({column:column,row:row});
+                return 2;
+            } else {
+                this.selectedItems = [];
+                return 0;
+            }
+        }
+    }
+
+    private AreAdjacent(item1: any, item2: { column: number; row: number }) {
+        if(item1.column === item2.column) {
+            if(item1.row === item2.row - 1 || item1.row === item2.row + 1) {
+                return true;
+            }
+        }
+        if(item1.row === item2.row) {
+            if(item1.column === item2.column - 1 || item1.column === item2.column + 1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    CanSwapItems() {
+        let item1 = this.selectedItems[0];
+        let item2 = this.selectedItems[1];
+        let item1Type = this.items[item1.column][item1.row].type;
+        let item2Type = this.items[item2.column][item2.row].type;
+        this.items[item1.column][item1.row].type = item2Type;
+        this.items[item2.column][item2.row].type = item1Type;
+        let clusters = this.FindClusters();
+        if(clusters.length > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    SwapItems() {
+        let item1 = this.selectedItems[0];
+        let item2 = this.selectedItems[1];
+        let item1Type = this.items[item1.column][item1.row].type;
+        let item2Type = this.items[item2.column][item2.row].type;
+        this.items[item1.column][item1.row].type = item2Type;
+        this.items[item2.column][item2.row].type = item1Type;
+    }
+
+    private FindClusters() {
+        let clusters = [];
+        for(let i = 0; i < this.columns; i++) {
+            for(let j = 0; j < this.rows; j++) {
+                let type = this.items[i][j].type;
+                let horizontalCluster = this.FindHorizontalCluster(i,j,type);
+                if(horizontalCluster.length >= 3) {
+                    clusters.push(horizontalCluster);
+                }
+                let verticalCluster = this.FindVerticalCluster(i,j,type);
+                if(verticalCluster.length >= 3) {
+                    clusters.push(verticalCluster);
+                }
+            }
+        }
+        return clusters;
+    }
+
+    private FindHorizontalCluster(i: number, j: number, type: any) {
+        let cluster = [];
+        let left = i;
+        let right = i;
+        while(left > 0 && this.items[left - 1][j].type === type) {
+            left--;
+        }
+        while(right < this.columns - 1 && this.items[right + 1][j].type === type) {
+            right++;
+        }
+        for(let k = left; k <= right; k++) {
+            cluster.push({column:k,row:j});
+        }
+        return cluster;
+    }
+
+    private FindVerticalCluster(i: number, j: number, type: any) {
+        let cluster = [];
+        let top = j;
+        let bottom = j;
+        while(top > 0 && this.items[i][top - 1].type === type) {
+            top--;
+        }
+        while(bottom < this.rows - 1 && this.items[i][bottom + 1].type === type) {
+            bottom++;
+        }
+        for(let k = top; k <= bottom; k++) {
+            cluster.push({column:i,row:k});
+        }
+        return cluster;
+    }
+
+    ClearSelectedItems() {
+        this.selectedItems = [];
+    }
+}
+class Item {
     column : number;
     row : number;
     type : number;
-    shift : number;
+    empty : boolean;
+    sprite : Sprite;
 
-    constructor(sprite : Sprite, column : number, row : number, type : number, shift : number) {
-        this.sprite = sprite;
+    constructor(column : number, row : number, type : number, empty : boolean, sprite : Sprite) {
         this.column = column;
         this.row = row;
         this.type = type;
-        this.shift = shift;
+        this.empty = true;
+        this.sprite = sprite;
     }
 }

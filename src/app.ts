@@ -1,6 +1,5 @@
 import Marrus from "./Core/Engine";
-import Match3 from "./Game";
-import TestRoom from "./TestRoom";
+import MainGame from "./Game";
 
 window.onload = function () {
     let config = new Marrus.Config();
@@ -8,7 +7,7 @@ window.onload = function () {
     let params = [];
     params.push({isNew: true})
     engine.Init();
-    let scene1 = new TestRoom(engine,params); //new Match3(engine,params);
+    let scene1 = new MainGame(engine,params);
     engine.sceneManager.AddScene(scene1);
     engine.sceneManager.SetScene(scene1);
 }

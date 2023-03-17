@@ -1,15 +1,19 @@
 export default class InputManagement {
-    constructor() { }
+    constructor() {
 
-    OnMouseMove(e) { }
+    }
 
-    OnMouseDown(e) { }
+    OnMouseMove(e) {
 
-    OnMouseUp(e) { }
+    }
 
-    OnMouseOut(e) { }
+    public OnMouseDown(e) { }
 
-    GetMousePos(canvas, e) {
+    public OnMouseUp(e) { }
+
+    public OnMouseOut(e) { }
+
+    public GetMousePos(canvas, e) {
         let rect = canvas.getBoundingClientRect();
         return {
             x: Math.round((e.clientX - rect.left) / (rect.right - rect.left) * canvas.width),
