@@ -1,23 +1,23 @@
 {
-  "name": "dfi.marrus-canvas",
-  "version": "0.0.02",
+  "name": "chroma-canvas",
+  "version": "0.0.03",
   "description": "Marrus Game Framework with HTML5 Canvas API",
   "main": "./dist/app.js",
   "scripts": {
-    "devBuild": "node build.js",
-    "build": "esbuild ./src/app.ts --bundle --outfile=./dist/app.js --minify --target=es2015 --minify --tsconfig=./tsconfig.json"
+    "devBuild": "node scripts/build.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zentyk/dfi.marrus-canvas.git"
+    "url": "git+https://github.com/zentyk/chroma-canvas"
   },
   "keywords": ["html5","canvas", "game", "framework", "marrus"],
   "author": "Zentyk",
   "license": "WTFPL",
   "bugs": {
-    "url": "https://github.com/zentyk/dfi.marrus-canvas/issues"
+    "url": "https://github.com/zentyk/chroma-canvas/issues"
   },
-  "homepage": "https://github.com/zentyk/dfi.marrus-canvas#readme",
+  "homepage": "https://github.com/zentyk/chroma-canvas#readme",
+
   "devDependencies": {
     "chokidar": "^3.5.3",
     "eslint": "^8.28.0"
