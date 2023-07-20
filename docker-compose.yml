@@ -1,11 +1,11 @@
 version: "3"
 
 services:
-  front:
-    container_name: client
+  samples:
+    container_name: lucius-samples
     image: nginx:1.14.2-alpine
     restart: always
     ports:
       - "80:80"
     volumes:
-      - ./dist:/usr/share/nginx/html:ro
+      - ./packages/@chroma-canvas-samples/dist:/usr/share/nginx/html:ro

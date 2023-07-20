@@ -2,6 +2,10 @@
   "compilerOptions": {
     "target": "ES6",
     "moduleResolution": "node",
+    "ignore": [
+      "node_modules",
+      "packages"
+    ],
     "esModuleInterop": true,
     "noResolve": false,
     "noImplicitAny": false,

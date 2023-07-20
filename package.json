@@ -1,11 +1,15 @@
 {
   "name": "chroma-canvas",
-  "version": "0.0.03",
+  "version": "0.0.1",
   "description": "Marrus Game Framework with HTML5 Canvas API",
   "main": "./dist/app.js",
   "scripts": {
-    "devBuild": "node scripts/build.js"
+    "build-engine-dev": "NODE_ENV=development node build.js",
+    "build-engine-prod": "NODE_ENV=production node build.js"
   },
+  "workspaces": [
+    "packages/*"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/zentyk/chroma-canvas"
@@ -20,7 +24,12 @@
 
   "devDependencies": {
     "chokidar": "^3.5.3",
-    "eslint": "^8.28.0"
+    "esbuild": "^0.16.4",
+    "eslint": "^8.28.0",
+    "fs-extra": "^11.1.1",
+    "handlebars": "^4.7.7",
+    "jest": "^29.6.1",
+    "sass": "^1.63.6"
   },
   "dependencies": {
     "esbuild": "0.16.4"

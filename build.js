@@ -6,7 +6,7 @@ let mode = process.env.NODE_ENV || 'development';
 
 function prodBuild() {
     esbuild.build({
-        entryPoints: ['./src/app.ts'],
+        entryPoints: ['./src/index.ts'],
         bundle: true,
         sourcemap : false,
         target : "ES2015",
@@ -26,7 +26,7 @@ function prodBuild() {
 
 function devBuild() {
     esbuild.build({
-        entryPoints: ['./src/app.ts'],
+        entryPoints: ['./src/index.ts'],
         bundle: true,
         sourcemap : true,
         target : "es2015",
@@ -44,16 +44,15 @@ function devBuild() {
 if (mode === 'development') {
     console.log('Development mode');
     devBuild();
+    watch('./src/**/*.ts', {})
+        .on('change', () => {
+            if(mode === 'development') {
+                devBuild();
+            } else {
+                prodBuild();
+            }
+        });
 } else {
     console.log('Production mode');
     prodBuild();
 }
-
-watch('./src/**/*.ts', {})
-    .on('change', () => {
-        if(mode === 'development') {
-            devBuild();
-        } else {
-            prodBuild();
-        }
-    });
