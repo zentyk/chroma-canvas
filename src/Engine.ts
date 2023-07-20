@@ -5,8 +5,6 @@ export default class Lucius {
         this.Init();
     }
     Init() {
-        let h =  document.documentElement.clientHeight * 0.99;
-        let w =  document.documentElement.clientWidth * 0.99;
         this.Viewport = new Viewport();
         this.Viewport.SetBackgroundColor('black');
 
