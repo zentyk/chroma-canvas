@@ -1,2 +1,2 @@
-export * from './Engine';
-export * from './Components/Viewport';
+export * as LUCIUS from './Engine';
+export * as Viewport from './Components/Viewport';
